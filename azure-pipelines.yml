@@ -131,5 +131,17 @@ stages:
             displayName: 'Azure App Service Deploy: website'
             inputs:
               azureSubscription: 'svc-conn-devops-spacegame-dpyptn-web-lab-dev'
+              deployToSlotOrASE: 'true'
+              resourceGroupName: 'rg-devops-spacegame-dpyptn-web-lab-dev'
+              slotName: 'swap'
               appName: '$(WebAppNameStaging)'
               package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+          - task: AzureAppServiceManage@0
+            displayName: 'Swap deployment slots'
+            inputs:
+              azureSubscription: 'svc-conn-devops-spacegame-dpyptn-web-lab-dev'
+              resourceGroupName: 'rg-devops-spacegame-dpyptn-web-lab-dev'
+              webAppName: '$(WebAppNameStaging)'
+              sourceSlot: 'swap'
+              targetSlot: 'production'
+              action: 'Swap Slots'
